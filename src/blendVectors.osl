@@ -1,0 +1,27 @@
+shader blendVectors
+[[
+    string as_node_name = "blend coordinates",
+    string as_category = "util"
+]]
+(
+    vector inV0 = 1,
+    float inA0 = 0
+    [[ string label = "amplitude 0"]],
+
+    vector inV1 = 1,
+    float inA1 = 0
+    [[ string label = "amplitude 1"]],
+
+    vector inV2 = 1,
+    float inA2 = 0
+    [[ string label = "amplitude 2"]],
+
+    output vector outV = 0
+    )
+{
+    vector sum_vec = 0;
+    sum_vec += inA0*inV0;
+    sum_vec += inA1*inV1;
+    sum_vec += inA2*inV2;
+    outV = sum_vec;
+}

@@ -1,0 +1,68 @@
+#include "math.h"
+
+shader fieldNoise
+    [[ string as_node_name = "Generate noise vector field"
+    ,  string as_classification = "utility" ]]
+(
+
+    string in_Mode = "Addition"
+    [[ string label = "Chose Mode",
+       string widget = "popup",
+       string options = "Multiply|Addition" ]],
+
+    int in_Octaves = 1
+    [[ string label = "Octaves",
+       string widget = "slider" ]],
+
+    vector in_Frequency = vector(1,1,1)
+    [[ string label = "Frequency"]],
+
+    float in_Offset = 1
+    [[ string label = "Offset" ]],
+
+    float in_Lacunarity = 2.13
+    [[ string label = "Lacunarity"]],
+
+    float in_H = 1
+    [[ string label = "H"]],
+
+    point in_P = P
+    [[ string label = "Input Coords" ]],
+
+    string in_OutputMode = "Signed"
+    [[ string label = "output to",
+       string widget = "popup",
+       string options = "Signed|Unsigned" ]],
+
+    output vector outVec = 0,
+){
+    vector offset = in_Offset * normalize(in_Frequency);
+    point pos = in_P*in_Frequency;
+    if (in_Mode == "Multiply") {
+        vector vec = vector(1.0);
+
+        for(int i=0; i< in_Octaves; ++i) {
+            vec *= (( (vector) noise("perlin", pos) ) + offset)
+                    * pow( in_Lacunarity, -in_H*i);
+            pos *= in_Lacunarity;
+        }
+        outVec = vec;
+    } else if (in_Mode == "Addition") {
+        vector vec = vector(0.0);
+
+        for(int i=0; i< in_Octaves; ++i) {
+            vec += ( (vector) noise("perlin", pos))
+                    * pow( in_Lacunarity, -in_H*i);
+            pos *= in_Lacunarity;
+        }
+        outVec = vec;
+    }
+
+    // limit output coordinats to [0 .. 1]
+    outVec = sigmoid(outVec);
+
+    // default is (in_OutputMode == "Unigned")
+    if (in_OutputMode == "Signed") {
+        outVec = 2*outVec - vector(1);
+    }
+}

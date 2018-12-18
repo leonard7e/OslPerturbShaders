@@ -1,0 +1,17 @@
+#include "math.h"
+
+shader fieldNoiseMMatrix
+    [[ string as_node_name = "Generate noise vector field"
+    ,  string as_classification = "utility" ]]
+(
+    float in_H = 1
+    [[
+        string label = "H",
+        float min = 0,
+        float max = 0.9
+    ]],
+    output matrix out_M = matrix(1)
+)
+{
+    out_M = in_H * out_M;
+}

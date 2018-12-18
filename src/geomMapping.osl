@@ -1,0 +1,28 @@
+shader geomMapping
+[[
+    string as_node_name = "geomMapping",
+    string as_category = "util"
+]]
+(
+    string Mode = "Z mapping"
+    [[ string label = "Chose Mode",
+       string widget = "popup",
+       string options = "Z mapping|Normals" ]],
+    float FromZ = 0
+    [[ string label = "From Z" ]],
+    float ToZ = 1
+    [[ string label = "To Z" ]],
+    output closure color E = 0*emission()
+    )
+{
+    if (Mode == "Z mapping") {
+            float l = ToZ - FromZ;
+            E = ( P[2] - FromZ ) / l  * emission();
+    } 
+    if (Mode == "Normals") {
+        float dx = 0.5*(1+N[0]);
+        float dy = 0.5*(1+N[1]);
+        float dz = N[2];
+        E = color(dx, dy, dz) * emission();
+    }
+}

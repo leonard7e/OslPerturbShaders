@@ -1,0 +1,64 @@
+shader tileCoords
+[[
+    string as_node_name = "apply modulo to coordinates",
+    string as_category = "util"
+]]
+(
+    point inP = P
+    [[ string label = "input coordinates"]],
+
+    int inModX = 0
+    [[ string label = "modulate X",
+    string widget = "checkBox",
+    int divider = 1,
+    int as_maya_attribute_connectable = 0,
+    int as_maya_attribute_keyable = 0,
+    int as_maya_attribute_hidden = 1,
+    int as_blender_input_socket = 0,
+    int gafferNoduleLayoutVisible = 0
+    ]],
+
+    int inModY = 0
+    [[ string label = "modulate Y",
+       string widget = "checkBox",
+       int divider = 1,
+       int as_maya_attribute_connectable = 0,
+       int as_maya_attribute_keyable = 0,
+       int as_maya_attribute_hidden = 1,
+       int as_blender_input_socket = 0,
+       int gafferNoduleLayoutVisible = 0
+       ]],
+
+
+    int inModZ = 0
+    [[ string label = "modulate Z",
+       string widget = "checkBox",
+       int divider = 1,
+       int as_maya_attribute_connectable = 0,
+       int as_maya_attribute_keyable = 0,
+       int as_maya_attribute_hidden = 1,
+       int as_blender_input_socket = 0,
+       int gafferNoduleLayoutVisible = 0
+       ]],
+
+    vector inFreq = 1
+    [[ string label = "frequency vector"]],
+
+    output vector outV = inP
+) {
+    // zero_offset is used to get rid of zero coordinate.
+    float zero_offset = 2^22;
+
+    point pos = inP;
+
+    if (inModX) {
+        pos[0] = fmod(inFreq[0]*(pos[0]+zero_offset),1);
+    }
+    if (inModY) {
+        pos[1] = fmod(inFreq[1]*(pos[1]+zero_offset),1);
+    }
+    if (inModZ) {
+        pos[2] = fmod(inFreq[2]*(pos[2]+zero_offset),1);
+    }
+    outV = pos;
+}
