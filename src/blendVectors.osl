@@ -1,3 +1,7 @@
+/*
+    Create a linear combination of 3 vectors.
+*/
+
 shader blendVectors
 [[
     string as_node_name = "blend coordinates",

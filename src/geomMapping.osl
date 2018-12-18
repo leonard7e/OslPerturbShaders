@@ -1,3 +1,7 @@
+/*
+    Create normal map or z-map from object.
+*/
+
 shader geomMapping
 [[
     string as_node_name = "geomMapping",
@@ -18,7 +22,7 @@ shader geomMapping
     if (Mode == "Z mapping") {
             float l = ToZ - FromZ;
             E = ( P[2] - FromZ ) / l  * emission();
-    } 
+    }
     if (Mode == "Normals") {
         float dx = 0.5*(1+N[0]);
         float dy = 0.5*(1+N[1]);

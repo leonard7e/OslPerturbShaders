@@ -6,7 +6,7 @@ shader fieldNoise
 (
 
     string in_Mode = "Addition"
-    [[ string label = "Chose Mode",
+    [[ string label = "Choose Mode",
        string widget = "popup",
        string options = "Multiply|Addition" ]],
 
@@ -58,10 +58,10 @@ shader fieldNoise
         outVec = vec;
     }
 
-    // limit output coordinats to [0 .. 1]
+    // limit output coordinates to [0 .. 1]
     outVec = sigmoid(outVec);
 
-    // default is (in_OutputMode == "Unigned")
+    // default is (in_OutputMode == "Unsigned")
     if (in_OutputMode == "Signed") {
         outVec = 2*outVec - vector(1);
     }
