@@ -1,0 +1,24 @@
+#define NMAX 4
+
+
+
+shader cpattern
+        [[ string as_node_name = "Pattern Shader"
+        ,  string as_classification = "utility" ]]
+(
+        point in_Coords = P
+        [[ string label = "Coordinates" ]],
+
+        output color out_C = 0
+)
+{
+        // point next_sorted [NMAX]= {point(0)};
+	// float next_dst [NMAX] = {0.0};
+	
+	vector variation = cellnoise(in_Coords);
+
+	vector cell = floor(in_Coords);
+	out_C = distance(cell, variation);
+
+}
+
