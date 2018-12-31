@@ -2,11 +2,18 @@
   Eine Bastelei …
 */
 
+#define EPSILON 0.001
+
 int matchCoord(point q)
 {
-  if (fmod(q[0],2)+ fmod(q[1],2) +fmod(q[2],2) < 0.01) {
+  point r = q + point(pow(2.0,22));
+
+  if (fmod(r[0]+r[1]+r[2],2) < EPSILON) {
    return 1;
   }
+  // if (fmod(r[0],2)+fmod(r[1],2)+fmod(r[2],2) < EPSILON) {
+  //  return 1;
+  // }
   else {
    return 0;
   }
@@ -18,9 +25,9 @@ void next_coords (point pCoord, output float dst, output point neighbour) {
   dst = pow(2.0,22);
   neighbour = point(0);
 
-  for (int dx = -1; dx <= 1; ++dx) {
-    for (int dy = -1; dy <= 1; ++dy) {
-      for (int dz = -1; dz <= 1; ++dz) {
+  for (int dx = 0; dx <= 1; ++dx) {
+    for (int dy = 0; dy <= 1; ++dy) {
+      for (int dz = 0; dz <= 1; ++dz) {
         point q = on_raster + vector((float)dx,(float)dy,(float)dz);
 
         if (matchCoord(q)) {
