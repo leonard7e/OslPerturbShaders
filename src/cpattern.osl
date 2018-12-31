@@ -35,7 +35,6 @@ int matchCoord(point q)
    return 0;
   }
 }
-*/
 
 int matchCoord(point q)
 {
@@ -52,6 +51,60 @@ int matchCoord(point q)
   }
 }
 
+int matchCoord(point q)
+{
+  point r = q + point(pow(2.0,22));
+
+  // if (fmod(r[0]+r[1]+r[2],2) < EPSILON) {
+  //  return 1;
+  // }
+  if (fmod(r[0],2)+fmod(r[1],2) - fmod(r[0]+r[1],2) < EPSILON) {
+   return 1;
+  }
+  else {
+   return 0;
+  }
+}
+
+int matchCoord(point q)
+{
+point r = q + point(pow(2.0,22));
+
+if (sin(r[0]*M_PI/2) + cos(r[1]*M_PI/4) < EPSILON) {
+return 1;
+}
+
+return 0;
+}
+
+
+int matchCoord(point q)
+{
+  point r = q + point(pow(2.0,22));
+
+  if ( fmod(r[0]+r[1], 4) < EPSILON) {
+    return 0;
+  }
+  if ( fmod(r[0]+r[1], 2) < EPSILON) {
+    return 1;
+  }
+
+  return 0;
+}
+*/
+
+
+// matchCoord basing on array?
+int matchCoord(point q)
+{
+  point r = q + point(pow(2.0,22));
+
+  if ( fmod(r[0]+r[1], 2) < EPSILON) {
+    return 1;
+  }
+
+  return 0;
+}
 
 #define LOWER -1
 #define UPPER 1
@@ -98,5 +151,5 @@ shader cpattern
   next_coords (in_Coords, dst, neighbour);
   out_F = dst;
   out_C = cellnoise(neighbour);
-  out_F = sigmoid(out_F);
+  // out_F = 1-sigmoid(out_F);
 }
