@@ -2,7 +2,12 @@
   Eine Bastelei …
 */
 
+#include "math.h"
+
 #define EPSILON 0.001
+
+/*
+Durch Variation von matchCoord können wir verschiedene Muster erzeugen.
 
 int matchCoord(point q)
 {
@@ -11,13 +16,45 @@ int matchCoord(point q)
   if (fmod(r[0]+r[1]+r[2],2) < EPSILON) {
    return 1;
   }
-  // if (fmod(r[0],2)+fmod(r[1],2)+fmod(r[2],2) < EPSILON) {
-  //  return 1;
-  // }
   else {
    return 0;
   }
 }
+
+int matchCoord(point q)
+{
+  point r = q + point(pow(2.0,22));
+
+  if (fmod(r[0]+r[1]+r[2],4) < EPSILON) {
+   return 1;
+  }
+  if (fmod(r[0],2)+fmod(r[1],2)+fmod(r[2],2) < EPSILON) {
+   return 1;
+  }
+  else {
+   return 0;
+  }
+}
+*/
+
+int matchCoord(point q)
+{
+  point r = q + point(pow(2.0,22));
+
+  if (fmod(r[0]-r[1]+r[2],2) + fmod(r[1]-r[0]+r[2],3)< EPSILON) {
+   return 1;
+  }
+  if (fmod(r[0]+r[1]+r[2],5) < EPSILON) {
+   return 1;
+  }
+  else {
+   return 0;
+  }
+}
+
+
+#define LOWER -1
+#define UPPER 1
 
 void next_coords (point pCoord, output float dst, output point neighbour) {
   point on_raster = floor(pCoord);
@@ -25,9 +62,9 @@ void next_coords (point pCoord, output float dst, output point neighbour) {
   dst = pow(2.0,22);
   neighbour = point(0);
 
-  for (int dx = 0; dx <= 1; ++dx) {
-    for (int dy = 0; dy <= 1; ++dy) {
-      for (int dz = 0; dz <= 1; ++dz) {
+  for (int dx = LOWER; dx <= UPPER; ++dx) {
+    for (int dy = LOWER; dy <= UPPER; ++dy) {
+      for (int dz = LOWER; dz <= UPPER; ++dz) {
         point q = on_raster + vector((float)dx,(float)dy,(float)dz);
 
         if (matchCoord(q)) {
@@ -59,6 +96,7 @@ shader cpattern
   float dst;
   point neighbour;
   next_coords (in_Coords, dst, neighbour);
-	out_F = dst;
-  out_C = neighbour;
+  out_F = dst;
+  out_C = cellnoise(neighbour);
+  out_F = sigmoid(out_F);
 }
