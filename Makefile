@@ -12,7 +12,7 @@ OBJ=$(addprefix shaders/, $(SHADERS))
 #SRC=$(appendprefix src/, $(SRC))
 
 # Chose OSLC executable
-OSLC=/home/claude/opt/appleseed/bin/oslc
+OSLC=/home/leonard/opt/appleseed/bin/oslc
 
 all: $(OBJ)
 

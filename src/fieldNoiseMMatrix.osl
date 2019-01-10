@@ -10,7 +10,7 @@ shader fieldNoiseMMatrix
         float min = 0,
         float max = 0.9
     ]],
-    output matrix out_M = matrix(1)
+    output matrix out_M = matrix(0.8)
 )
 {
     out_M = in_H * out_M;
