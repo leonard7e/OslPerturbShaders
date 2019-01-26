@@ -1,58 +1,65 @@
 /*
   Tile a height map.
 */
+#include "vec2.h"
 
 #define NTILES 3
 
-void tile_texture (
+
+void shuffle_texture (string texname, float s, float t, output float tex) {
+    tex = texture(texname, s, t, "width", 1);
+}
+
+void tile_pattern (
   point pCoord,
   string texname,
   output float relief
 ){
-  point pos = pCoord + vector(pow(2,12));
+    point pos = pCoord + vector(pow(2,12));
 
-  float _s = fmod(pos[0],1);
-  float _t = fmod(pos[1],1);
+    float _s = fmod(pos[0],1);
+    float _t = fmod(pos[1],1);
 
-  float dx, dy;
+    float dx, dy;
 
-  float nMax = 3;
-  float ratio = 1.0/nMax;
+    float nMax = 3;
+    float ratio = 1.0/nMax;
 
-  for (dx = 0; dx < NTILES; dx += 1.0) {
-    for (dy = 0; dy < NTILES; dy += 1.0) {
+    for (dx = 0; dx < NTILES; dx += 1.0) {
+        for (dy = 0; dy < NTILES; dy += 1.0) {
 
-      float s = (1.0/NTILES) * (dx+_s);
-      float t = (1.0/NTILES) * (dy+_t);
+            float s = (1.0/NTILES) * (dx+_s);
+            float t = (1.0/NTILES) * (dy+_t);
 
-      float tex = texture(texname, s, t, "width", 1);
+            float tex = 0;
 
-      relief = max(relief,tex);
+            shuffle_texture(texname, s, t, tex);
+
+            relief = max(relief,tex);
+        }
     }
-  }
 }
 
 shader cpattern
-        [[ string as_node_name = "Pattern Shader"
-        ,  string as_classification = "utility" ]]
+    [[ string as_node_name = "Pattern Shader"
+    ,  string as_classification = "utility" ]]
 (
-        point in_Coords = P
-		[[ string label = "Coordinates" ]],
+    point in_Coords = P
+    [[ string label = "Coordinates" ]],
 
-		string in_Texture_Tile = ""
-		[[ string label = "Texture Tile",
-			int as_maya_attribute_connectable = 0,
-			int as_maya_attribute_keyable = 0,
-			int as_maya_attribute_hidden = 1,
-			int as_blender_input_socket = 0,
-			int gafferNoduleLayoutVisible = 0,
-			int divider = 1,
-		 	string widget = "filename"]],
+    string in_Texture_Tile = ""
+    [[ string label = "Texture Tile",
+    int as_maya_attribute_connectable = 0,
+    int as_maya_attribute_keyable = 0,
+    int as_maya_attribute_hidden = 1,
+    int as_blender_input_socket = 0,
+    int gafferNoduleLayoutVisible = 0,
+    int divider = 1,
+    string widget = "filename"]],
 
-      output float out_F = 0
-)
-{
-  float relief = 0;
-  tile_texture (in_Coords, in_Texture_Tile, relief);
-  out_F = relief;
+    output float out_F = 0
+){
+    float relief = 0;
+    tile_pattern (in_Coords, in_Texture_Tile, relief);
+    out_F = relief;
 }
