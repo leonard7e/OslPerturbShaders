@@ -26,6 +26,13 @@ shader fieldNoise
     float in_H = 1
     [[ string label = "H"]],
 
+    float in_Contrast = 0
+    [[
+        string label = "Contrast",
+        float min = -10,
+        float max = 10
+    ]],
+
     point in_P = P
     [[ string label = "Input Coords" ]],
 
@@ -59,7 +66,7 @@ shader fieldNoise
     }
 
     // limit output coordinates to [0 .. 1]
-    outVec = sigmoid(outVec);
+    outVec = sigmoid(exp(in_Contrast) * outVec);
 
     // default is (in_OutputMode == "Unsigned")
     if (in_OutputMode == "Signed") {

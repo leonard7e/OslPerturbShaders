@@ -1,6 +1,5 @@
 #include "math.h"
 
-
 shader fieldNoiseM
     [[ string as_node_name = "Generate noise vector field"
     ,  string as_classification = "utility" ]]
@@ -21,9 +20,9 @@ shader fieldNoiseM
     vector in_Lacunarity = 2.13
     [[ string label = "Lacunarity"]],
 
-    float in_Sharpness = 1
+    float in_Contrast = 0
     [[
-        string label = "Sharpness",
+        string label = "Contrast",
         float min = -10,
         float max = 10
     ]],
@@ -46,23 +45,16 @@ shader fieldNoiseM
 
     for(int i=0; i< in_Octaves; ++i) {
         H = in_Transform * H;
-
         vector displ = vec + noise("perlin", pos);
-
         vec += in_Lacunarity * transform(H, displ);
-
         pos = pos * in_Lacunarity;
     }
 
     // limit output coordinates to [0 .. 1]
-    outVec = sigmoid(exp(in_Sharpness) * vec);
+    outVec = sigmoid(exp(in_Contrast) * vec);
 
     // default is (in_OutputMode == "Unsigned")
     if (in_OutputMode == "Signed") {
         outVec = 2*outVec - vector(1);
     }
 }
-
-
-/*
-*/
