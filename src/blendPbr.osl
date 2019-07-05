@@ -1,0 +1,46 @@
+#include "PbrBundle.h"
+
+
+#define BLEND_PBR(OUT,A,P) \
+OUT.SurfaceColor       = (1-A)*OUT.SurfaceColor + A*P.SurfaceColor; \
+OUT.Subsurface         = (1-A)*OUT.Subsurface + A*P.Subsurface; \
+OUT.Metallic           = (1-A)*OUT.Metallic + A*P.Metallic; \
+OUT.Specular           = (1-A)*OUT.Specular + A*P.Specular; \
+OUT.Roughness          = (1-A)*OUT.Roughness + A*P.Roughness; \
+OUT.EmissiveColor      = (1-A)*OUT.EmissiveColor + A*P.EmissiveColor; \
+OUT.EmissiveIntensity  = (1-A)*OUT.EmissiveIntensity + A*P.EmissiveIntensity;
+
+shader blendPbr
+[[
+    string as_node_name = "Pack PBR parameters.",
+    string as_category = "util"
+]]
+(
+    PbrBundle PbrB0 = {0},
+    float A1 = 0,
+    PbrBundle PbrB1 = {0},
+    float A2 = 0,
+    PbrBundle PbrB2 = {0},
+    float A3 = 0,
+    PbrBundle PbrB3 = {0},
+    float A4 = 0,
+    PbrBundle PbrB4 = {0},
+    float A5 = 0,
+    PbrBundle PbrB5 = {0},
+    output PbrBundle outPbrB = {0}
+)
+{
+    outPbrB.SurfaceColor       = PbrB0.SurfaceColor;
+    outPbrB.Subsurface         = PbrB0.Subsurface;
+    outPbrB.Metallic           = PbrB0.Metallic;
+    outPbrB.Specular           = PbrB0.Specular;
+    outPbrB.Roughness          = PbrB0.Roughness;
+    outPbrB.EmissiveColor      = PbrB0.EmissiveColor;
+    outPbrB.EmissiveIntensity  = PbrB0.EmissiveIntensity;
+
+    BLEND_PBR(outPbrB,A1,PbrB1);
+    BLEND_PBR(outPbrB,A2,PbrB2);
+    BLEND_PBR(outPbrB,A3,PbrB3);
+    BLEND_PBR(outPbrB,A4,PbrB4);
+    BLEND_PBR(outPbrB,A5,PbrB5);
+}

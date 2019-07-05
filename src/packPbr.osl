@@ -1,0 +1,27 @@
+#include "PbrBundle.h"
+
+shader packPbr
+[[
+    string as_node_name = "Pack PBR parameters.",
+    string as_category = "util"
+]]
+(
+    color SurfaceColor = 0.8
+    [[ string label = "amplitude 0"]],
+    float Subsurface = 0.0,
+    float Metallic = 0.0,
+    float Specular = 0.5,
+    float Roughness = 0.5,
+    color EmissiveColor = 0.0,
+    float EmissiveIntensity = 0.0,
+    output PbrBundle PbrB = {0}
+)
+{
+    PbrB.SurfaceColor       = SurfaceColor;
+    PbrB.Subsurface         = Subsurface;
+    PbrB.Metallic           = Metallic;
+    PbrB.Specular           = Specular;
+    PbrB.Roughness          = Roughness;
+    PbrB.EmissiveColor      = EmissiveColor;
+    PbrB.EmissiveIntensity  = EmissiveIntensity;
+}

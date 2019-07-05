@@ -1,10 +1,11 @@
 # Leo's Makefile for compiling OSL shaders
 SRC_UTILS= geomMapping.osl alterMatrix.osl cpattern.osl
 SRC_MAP_PERTURB=perturbCoords.osl perturbUV.osl
-SRC_GENERATORS= fieldNoise.osl fieldNoiseM.osl fieldNoiseMMatrix.osl
+SRC_GENERATORS= fieldNoise.osl fieldNoiseM.osl newMMatrix.osl
 SRC_PROCESSORS= blendVectors.osl tileCoords.osl
+SRC_PBRPACK= packPbr.osl unpackPbr.osl blendPbr.osl
 # Gather all shader sources to a big list
-SRC=$(SRC_UTILS) $(SRC_GENERATORS) $(SRC_PROCESSORS) $(SRC_MAP_PERTURB)
+SRC=$(SRC_UTILS) $(SRC_GENERATORS) $(SRC_PROCESSORS) $(SRC_MAP_PERTURB) $(SRC_PBRPACK)
 
 # Compile targets are estimated automatically
 SHADERS=$(SRC:.osl=.oso)
@@ -12,7 +13,7 @@ OBJ=$(addprefix shaders/, $(SHADERS))
 
 #SRC=$(appendprefix src/, $(SRC))
 
-# Chose OSLC executable
+# Tell make where to find OSLC executable. Please edit line below.
 OSLC=/home/leonard/opt/appleseed/bin/oslc
 
 all: $(OBJ)
