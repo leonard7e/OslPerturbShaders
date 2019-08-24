@@ -3,11 +3,10 @@
 shader sTiles(
     point inP = P,
     int nTiles = 1,
-    string imgFile = "",
-    output color outC = 0.0 )
+    output point outBUV = point(0.0),
+    output float outUV[2] = {0.0}
+    )
 {
-    // float U = inP[0];
-    // float V = inP[1];
     float U = 1.0/nTiles*mod(nTiles*inP[0]+1.0e5,1.0);
     float V = 1.0/nTiles*mod(nTiles*inP[1]+1.0e5,1.0);
 
@@ -17,10 +16,8 @@ shader sTiles(
     float signU = sign(0.5-noise ("cell", nTiles*inP, 0.0));
     float signV = sign(0.5-noise ("cell", nTiles*inP, 10.0));
 
-    outC = texture(
-      imgFile,
-      tileU+signU*U,
-      tileV+signV*V,
-      "wrap", "periodic"
-    );
+    outUV[0] = tileU+signU*U;
+    outUV[1] = tileV+signV*V;
+
+    outBUV = point(outUV[0], outUV[1],0);
 }

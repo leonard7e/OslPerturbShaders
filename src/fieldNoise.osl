@@ -4,72 +4,76 @@ shader fieldNoise
     [[ string as_node_name = "Generate noise vector field"
     ,  string as_classification = "utility" ]]
 (
+    string inNoise = "perlin"
+    [[ string label = "noise base",
+      string widget = "popup",
+      string options = "perlin|simplex" ]],
 
-    string in_Mode = "Addition"
-    [[ string label = "Choose Mode",
+    string inMode = "add"
+    [[ string label = "processing",
        string widget = "popup",
-       string options = "Multiply|Addition" ]],
+       string options = "multiply|add" ]],
 
-    int in_Octaves = 1
-    [[ string label = "Octaves",
+    int inOctaves = 1
+    [[ string label = "octaves",
        string widget = "slider" ]],
 
-    vector in_Frequency = vector(1,1,1)
-    [[ string label = "Frequency"]],
+    vector inFrequency = vector(1,1,1)
+    [[ string label = "frequency"]],
 
-    float in_Offset = 1
-    [[ string label = "Offset" ]],
+    float inOffset = 1
+    [[ string label = "offset" ]],
 
-    float in_Lacunarity = 2.13
-    [[ string label = "Lacunarity"]],
+    float inLacunarity = 2.13
+    [[ string label = "lacunarity"]],
 
-    float in_H = 1
+    float inH = 1
     [[ string label = "H"]],
 
-    float in_Contrast = 0
+    float inContrast = 0
     [[
-        string label = "Contrast",
+        string label = "contrast",
         float min = -10,
         float max = 10
     ]],
 
-    point in_P = P
-    [[ string label = "Input Coords" ]],
+    point inP = P
+    [[ string label = "input coords" ]],
 
-    string in_OutputMode = "Signed"
-    [[ string label = "output to",
+    string inSlope = "signed"
+    [[ string label = "output slope",
        string widget = "popup",
-       string options = "Signed|Unsigned" ]],
+       string options = "signed|unsigned" ]],
 
     output vector outVec = 0,
 ){
-    vector offset = in_Offset * normalize(in_Frequency);
-    point pos = in_P*in_Frequency;
-    if (in_Mode == "Multiply") {
+    vector offset = inOffset * normalize(inFrequency);
+    point pos = inP*inFrequency;
+    if (inMode == "multiply") {
         vector vec = vector(1.0);
 
-        for(int i=0; i< in_Octaves; ++i) {
-            vec *= (( (vector) noise("perlin", pos) ) + offset)
-                    * pow( in_Lacunarity, -in_H*i);
-            pos *= in_Lacunarity;
+        for(int i=0; i< inOctaves; ++i) {
+            vec *= (( (vector) noise(inNoise, pos) ) + offset)
+                    * pow( inLacunarity, -inH*i);
+            pos *= inLacunarity;
         }
         outVec = vec;
-    } else if (in_Mode == "Addition") {
+    } else if (inMode == "add") {
         vector vec = vector(0.0);
 
-        for(int i=0; i< in_Octaves; ++i) {
-            vec += ( (vector) noise("perlin", pos))
-                    * pow( in_Lacunarity, -in_H*i);
-            pos *= in_Lacunarity;
+        for(int i=0; i< inOctaves; ++i) {
+            vec += ( (vector) noise(inNoise, pos))
+                    * pow( inLacunarity, -inH*i);
+            pos *= inLacunarity;
         }
         outVec = vec;
     }
 
     // limit output coordinates to [0 .. 1]
-    outVec = sigmoid(exp(in_Contrast) * outVec);
+    outVec = sigmoid(exp(inContrast) * outVec);
 
-    // default is (in_OutputMode == "Unsigned")
-    if (in_OutputMode == "Signed") {
+    // default is (inSlope == "unsigned")
+    if (inSlope == "signed") {
         outVec = 2*outVec - vector(1);
     }
 }
