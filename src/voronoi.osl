@@ -1,0 +1,71 @@
+#include "generic_distance.h"
+
+shader Voronoi(
+    point inP = P,
+    string inDistanceMethod = "distance",
+    float inMinkowskiExp = 2.0,
+    float inSmooth = 0.0,
+    float inStep = 1.0,
+    output float D1 = 0.0,
+    output float D2 = 0.0,
+    output float D3 = 0.0,
+    output float D4 = 0.0,
+    output point P1 = point(0.0),
+    output point P2 = point(0.0),
+    output point P3 = point(0.0),
+    output point P4 = point(0.0)
+  )
+{
+    point segmP = floor(inP);
+    float pDistance[4] = {1e10,1e10,1e10,1e10};
+    point pLocation[4] = {point(0)};
+
+    for (float dx=-1; dx<=1; dx++) {
+      for (float dy=-1; dy<=1; dy++) {
+        for (float dz=-1; dz<=1; dz++) {
+            point P0 = vector(dx,dy,dz) + segmP;
+            vector q = hashnoise(P0);
+            point PP = P0+q;
+            float d = generic_distance(inDistanceMethod, inP, PP, inMinkowskiExp);
+
+            if (d < pDistance[0]) {
+                pDistance[3] = pDistance[2];
+                pDistance[2] = pDistance[1];
+                pDistance[1] = pDistance[0];
+                pDistance[0] = d;
+                pLocation[3] = pLocation[2];
+                pLocation[2] = pLocation[1];
+                pLocation[1] = pLocation[0];
+                pLocation[0] = P0;
+           }
+            else if (d < pDistance[1]) {
+                pDistance[3] = pDistance[2];
+                pDistance[2] = pDistance[1];
+                pDistance[1] = d;
+                pLocation[3] = pLocation[2];
+                pLocation[2] = pLocation[1];
+                pLocation[1] = P0;
+            }
+            else if (d < pDistance[2]) {
+                pDistance[3] = pDistance[2];
+                pDistance[2] = d;
+                pLocation[3] = pLocation[2];
+                pLocation[2] = P0;
+            }
+            else if (d < pDistance[3]) {
+                pDistance[3] = d;
+                pLocation[3] = P0;
+            }
+          }
+        }
+    }
+    D1 = smoothstep(inStep, inStep+inSmooth, pDistance[0]);
+    D2 = pDistance[1];
+    D3 = pDistance[2];
+    D4 = pDistance[3];
+
+    P1 = pLocation[0];
+    P2 = pLocation[1];
+    P3 = pLocation[2];
+    P4 = pLocation[3];
+}

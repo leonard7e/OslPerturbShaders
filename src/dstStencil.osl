@@ -1,0 +1,45 @@
+#include "generic_distance.h"
+
+/*
+ * Main shader.
+ */
+
+shader dstStencil
+       [[ string help = "Generates a stencil out of input color values inColor and inNeighbourColor" ]]
+(
+    float range = 0.2
+    [[ string help = "Defines the size of the area around inColor. Need to be a positive and greater then zero." ]],
+
+    string inDistanceMethod = "distance"
+    [[ string label = "Distance Method",
+       string widget = "popup",
+       string options = "distance|distance squared|manhattan|chebichew|minkowsky" ]],
+
+    float inMinkowskiExp = 2.0
+    [[ string label = "Minkowski Exponent"]],
+
+    color inColor = 0.8
+    [[ string label = "Base Color"]],
+
+    color inNeighbourColor = 0.8
+    [[ string label = "Neighbour Color"]],
+
+    output float outStencil = 0
+    [[ string help = "The value of the stencil node is a float between 0 and 1."]]
+)
+{
+  /* We calculate distance between 'inColor' and 'inNeighbourColor'. */
+  float dst = generic_distance (inDistanceMethod, inColor, inNeighbourColor, inMinkowskiExp);
+
+  /* Now we test, whether 'inNeighbourColor' is inside the spere
+   * arount inColor with radius 'range'. */
+
+  if ( dst < range ) {
+    /* inside */
+    outStencil = 1-dst/range;
+  }
+  else {
+    /* outside */
+    outStencil = 0;
+  }
+}

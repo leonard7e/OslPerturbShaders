@@ -1,11 +1,13 @@
 # Leo's Makefile for compiling OSL shaders
-SRC_UTILS= geomMapping.osl alterMatrix.osl cpattern.osl
+SRC_UTILS= geomMapping.osl alterMatrix.osl sTiles.osl #cpattern.osl
 SRC_MAP_PERTURB=perturbCoords.osl perturbUV.osl
 SRC_GENERATORS= fieldNoise.osl fieldNoiseM.osl newMMatrix.osl
 SRC_PROCESSORS= blendVectors.osl tileCoords.osl
 SRC_PBRPACK= packPbr.osl unpackPbr.osl blendPbr.osl
+SRC_TEXTURES=voronoi.osl
+SRC_PATTERN=dstStencil.osl
 # Gather all shader sources to a big list
-SRC=$(SRC_UTILS) $(SRC_GENERATORS) $(SRC_PROCESSORS) $(SRC_MAP_PERTURB) $(SRC_PBRPACK)
+SRC=$(SRC_UTILS) $(SRC_GENERATORS) $(SRC_PROCESSORS) $(SRC_MAP_PERTURB) $(SRC_PBRPACK) $(SRC_TEXTURES) $(SRC_PATTERN)
 
 # Compile targets are estimated automatically
 SHADERS=$(SRC:.osl=.oso)
