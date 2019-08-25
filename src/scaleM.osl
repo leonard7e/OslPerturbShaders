@@ -1,0 +1,16 @@
+#include "math.h"
+
+shader scaleM (
+    float inScale = 0
+    [[ string label = "Scale"]],
+
+    matrix inM = matrix(1)
+    [[ string label = "Input Matrix"]],
+
+    output matrix outM = 1
+)
+{
+    matrix m = matrix(1);
+    m = inScale * m;
+    outM = inM * m;
+}

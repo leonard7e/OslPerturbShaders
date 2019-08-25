@@ -1,0 +1,17 @@
+#include "math.h"
+
+shader rotateM (
+    vector inRotate = 0
+    [[ string label = "Euler Rotation"]],
+
+    matrix inM = matrix(1)
+    [[ string label = "Input Matrix"]],
+
+    output matrix outM = 1
+)
+{
+    matrix m = matrix(1);
+    m = m * matrix_from_euler( radians(inRotate) );
+
+    outM = inM * m;
+}

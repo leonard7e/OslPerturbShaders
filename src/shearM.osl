@@ -1,0 +1,16 @@
+#include "math.h"
+
+shader shearM (
+    float inShear = 0
+    [[ string label = "Shear"]],
+    
+    matrix inM = matrix(1)
+    [[ string label = "Input Matrix"]],
+
+    output matrix outM = 1
+)
+{
+    matrix m = matrix(1);
+    m[0][2] = inShear ;
+    outM = inM * m;
+}

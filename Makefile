@@ -1,5 +1,5 @@
 # Leo's Makefile for compiling OSL shaders
-SRC_UTILS= geomMapping.osl alterMatrix.osl sTiles.osl #cpattern.osl
+SRC_UTILS= geomMapping.osl alterMatrix.osl sTiles.osl rotateM.osl scaleM.osl shearM.osl translateM.osl
 SRC_MAP_PERTURB=perturbCoords.osl perturbUV.osl
 SRC_GENERATORS= fieldNoise.osl fieldNoiseM.osl newMMatrix.osl
 SRC_PROCESSORS= blendVectors.osl tileCoords.osl
