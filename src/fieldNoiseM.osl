@@ -20,20 +20,8 @@ shader fieldNoiseM
     vector in_Lacunarity = 2.13
     [[ string label = "Lacunarity"]],
 
-    float in_Contrast = 0
-    [[
-        string label = "Contrast",
-        float min = -10,
-        float max = 10
-    ]],
-
     point in_P = P
     [[ string label = "Input Coordinates" ]],
-
-    string in_OutputMode = "Signed"
-    [[ string label = "output to",
-       string widget = "popup",
-       string options = "Signed|Unsigned" ]],
 
     output vector outVec = 0,
 ){
@@ -48,13 +36,5 @@ shader fieldNoiseM
         vector displ = vec + noise("perlin", pos);
         vec += in_Lacunarity * transform(H, displ);
         pos = pos * in_Lacunarity;
-    }
-
-    // limit output coordinates to [0 .. 1]
-    outVec = sigmoid(exp(in_Contrast) * vec);
-
-    // default is (in_OutputMode == "Unsigned")
-    if (in_OutputMode == "Signed") {
-        outVec = 2*outVec - vector(1);
     }
 }

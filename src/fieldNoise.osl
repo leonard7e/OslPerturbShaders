@@ -1,5 +1,45 @@
 #include "math.h"
 
+// Basic Noise
+vector basic_noise_multiply(
+  string noise_method,
+  point pos,
+  int octaves,
+  vector offset,
+  float lacunarity,
+  float H
+)
+{
+  vector vec = vector(1.0);
+
+  for(int i=0; i< octaves; ++i) {
+    vec *= (( (vector) noise(noise_method, pos) ) + offset)
+    - pow( lacunarity, -H*i);
+    pos *= lacunarity;
+  }
+  return vec;
+}
+
+vector basic_noise_add(
+  string noise_method,
+  point pos,
+  int octaves,
+  float lacunarity,
+  float H
+  )
+{
+  vector vec = vector(1.0);
+
+  for(int i=0; i< octaves; ++i) {
+    vec += ( (vector) noise(noise_method, pos))
+             * pow( lacunarity, -H*i);
+    pos *= lacunarity;
+  }
+  return vec;
+}
+
+
+
 shader fieldNoise
     [[ string as_node_name = "Generate noise vector field"
     ,  string as_classification = "utility" ]]
@@ -9,8 +49,12 @@ shader fieldNoise
       string widget = "popup",
       string options = "perlin|simplex" ]],
 
-    string inMode = "add"
-    [[ string label = "processing",
+    int inSeed = 0
+    [[ string label = "seed",
+       string widget = "slider" ]],
+
+    string inCombination = "add"
+    [[ string label = "combination method",
        string widget = "popup",
        string options = "multiply|add" ]],
 
@@ -30,50 +74,23 @@ shader fieldNoise
     float inH = 1
     [[ string label = "H"]],
 
-    float inContrast = 0
-    [[
-        string label = "contrast",
-        float min = -10,
-        float max = 10
-    ]],
-
     point inP = P
     [[ string label = "input coords" ]],
-
-    string inSlope = "signed"
-    [[ string label = "output slope",
-       string widget = "popup",
-       string options = "signed|unsigned" ]],
 
     output vector outVec = 0,
 ){
     vector offset = inOffset * normalize(inFrequency);
     point pos = inP*inFrequency;
-    if (inMode == "multiply") {
-        vector vec = vector(1.0);
 
-        for(int i=0; i< inOctaves; ++i) {
-            vec *= (( (vector) noise(inNoise, pos) ) + offset)
-                    * pow( inLacunarity, -inH*i);
-            pos *= inLacunarity;
-        }
-        outVec = vec;
-    } else if (inMode == "add") {
-        vector vec = vector(0.0);
-
-        for(int i=0; i< inOctaves; ++i) {
-            vec += ( (vector) noise(inNoise, pos))
-                    * pow( inLacunarity, -inH*i);
-            pos *= inLacunarity;
-        }
-        outVec = vec;
-    }
-
-    // limit output coordinates to [0 .. 1]
-    outVec = sigmoid(exp(inContrast) * outVec);
-
-    // default is (inSlope == "unsigned")
-    if (inSlope == "signed") {
-        outVec = 2*outVec - vector(1);
+    if (inCombination == "multiply") {
+      outVec = basic_noise_multiply( inNoise, pos,
+        inOctaves, offset,
+        inLacunarity, inH
+      );
+    } else if (inCombination == "add") {
+        outVec = basic_noise_add( inNoise, pos,
+          inOctaves,
+          inLacunarity, inH
+        );
     }
 }

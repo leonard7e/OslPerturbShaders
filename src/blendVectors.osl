@@ -2,6 +2,8 @@
     Create a linear combination of 3 vectors.
 */
 
+#include "math.h"
+
 shader blendVectors
 [[
     string as_node_name = "blend coordinates",
@@ -23,9 +25,7 @@ shader blendVectors
     output vector outV = 0
     )
 {
-    vector sum_vec = 0;
-    sum_vec += inA0*inV0;
-    sum_vec += inA1*inV1;
-    sum_vec += inA2*inV2;
-    outV = sum_vec;
+    outV = inA0*inV0;
+    outV += inA1*inV1;
+    outV += inA2*inV2;
 }
