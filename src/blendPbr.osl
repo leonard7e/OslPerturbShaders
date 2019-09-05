@@ -2,7 +2,7 @@
 
 
 #define BLEND_PBR(OUT,A,P) \
-OUT.SurfaceColor       = (1-A)*OUT.SurfaceColor + A*P.SurfaceColor; \
+OUT.BaseColor       = (1-A)*OUT.BaseColor + A*P.BaseColor; \
 OUT.Subsurface         = (1-A)*OUT.Subsurface + A*P.Subsurface; \
 OUT.Metallic           = (1-A)*OUT.Metallic + A*P.Metallic; \
 OUT.Specular           = (1-A)*OUT.Specular + A*P.Specular; \
@@ -30,7 +30,7 @@ shader blendPbr
     output PbrBundle outPbrB = {0}
 )
 {
-    outPbrB.SurfaceColor       = PbrB0.SurfaceColor;
+    outPbrB.BaseColor       = PbrB0.BaseColor;
     outPbrB.Subsurface         = PbrB0.Subsurface;
     outPbrB.Metallic           = PbrB0.Metallic;
     outPbrB.Specular           = PbrB0.Specular;

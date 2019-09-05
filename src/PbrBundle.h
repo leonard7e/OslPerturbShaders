@@ -2,14 +2,12 @@
 #define __PBRBUNDLE__H
 
 struct PbrBundle {
-    color SurfaceColor;
+    color BaseColor;
+    color SSSColor;
     float Subsurface;
     float Metallic;
-    float Specular;
     float Roughness;
-    color EmissiveColor;
-    float EmissiveIntensity;
-
+    float Specular;
 };
 
 #endif
