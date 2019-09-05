@@ -3,12 +3,11 @@
 
 #define BLEND_PBR(OUT,A,P) \
 OUT.BaseColor       = (1-A)*OUT.BaseColor + A*P.BaseColor; \
+OUT.SSSColor       = (1-A)*OUT.SSSColor + A*P.SSSColor; \
 OUT.Subsurface         = (1-A)*OUT.Subsurface + A*P.Subsurface; \
 OUT.Metallic           = (1-A)*OUT.Metallic + A*P.Metallic; \
 OUT.Specular           = (1-A)*OUT.Specular + A*P.Specular; \
-OUT.Roughness          = (1-A)*OUT.Roughness + A*P.Roughness; \
-OUT.EmissiveColor      = (1-A)*OUT.EmissiveColor + A*P.EmissiveColor; \
-OUT.EmissiveIntensity  = (1-A)*OUT.EmissiveIntensity + A*P.EmissiveIntensity;
+OUT.Roughness          = (1-A)*OUT.Roughness + A*P.Roughness;
 
 shader blendPbr
 [[
@@ -30,13 +29,12 @@ shader blendPbr
     output PbrBundle outPbrB = {0}
 )
 {
-    outPbrB.BaseColor       = PbrB0.BaseColor;
+    outPbrB.BaseColor          = PbrB0.BaseColor;
+    outPbrB.SSSColor           = PbrB0.SSSColor;
     outPbrB.Subsurface         = PbrB0.Subsurface;
     outPbrB.Metallic           = PbrB0.Metallic;
     outPbrB.Specular           = PbrB0.Specular;
     outPbrB.Roughness          = PbrB0.Roughness;
-    outPbrB.EmissiveColor      = PbrB0.EmissiveColor;
-    outPbrB.EmissiveIntensity  = PbrB0.EmissiveIntensity;
 
     BLEND_PBR(outPbrB,A1,PbrB1);
     BLEND_PBR(outPbrB,A2,PbrB2);
