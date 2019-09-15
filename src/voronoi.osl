@@ -60,9 +60,9 @@ shader Voronoi(
         }
     }
     D1 = smoothstep(inStep, inStep+inSmooth, pDistance[0]);
-    D2 = pDistance[1];
-    D3 = pDistance[2];
-    D4 = pDistance[3];
+    D2 = smoothstep(inStep, inStep+inSmooth, pDistance[1]);
+    D3 = smoothstep(inStep, inStep+inSmooth, pDistance[2]);
+    D4 = smoothstep(inStep, inStep+inSmooth, pDistance[3]);
 
     P1 = pLocation[0];
     P2 = pLocation[1];
